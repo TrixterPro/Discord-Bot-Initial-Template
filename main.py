@@ -25,11 +25,6 @@ try:
                 print(f"[LOGS] Successfully loaded {filename[:-3]}")
             else:
                 pass
-        
-    statuses = [
-        "Ben's discord server!",
-        "Ben coding his plugins!"
-    ]
 
 
     @bot.event
@@ -42,10 +37,6 @@ try:
         f'''\n
         BOT IS ONLINE! ({bot.user})
     \n''')
-        while True:
-            for status in statuses:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
-                await asyncio.sleep(10)
             
 
         
