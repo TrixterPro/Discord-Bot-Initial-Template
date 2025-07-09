@@ -1,4 +1,7 @@
 try:
+    from utils.PackageHandler import auto_install_missing_packages
+    auto_install_missing_packages()
+    
     import discord
     from discord.ext import commands
     import os
