@@ -1,5 +1,7 @@
 try:
     from utils.PackageHandler import auto_install_missing_packages
+    from utils.Colors import Colors
+    print(f'[{Colors.GREEN}{Colors.BOLD}LOGS{Colors.RESET}] Verifying packages...')
     auto_install_missing_packages()
     
     import discord
@@ -25,7 +27,7 @@ try:
         for filename in os.listdir("./cogs"):
             if filename.endswith(".py"):
                 await bot.load_extension(f"cogs.{filename[:-3]}")
-                print(f"[LOGS] Successfully loaded {filename[:-3]}")
+                print(f"[{Colors.GREEN}{Colors.BOLD}LOGS{Colors.RESET}] Successfully loaded {filename[:-3]}")
             else:
                 pass
 
@@ -35,7 +37,7 @@ try:
 
         await load_all_extensions()
         synced = await bot.tree.sync()
-        print(f"[LOGS] Successfully synced all slash commands")
+        print(f"[{Colors.GREEN}{Colors.BOLD}LOGS{Colors.RESET}] Successfully synced all slash commands")
         print(
         f'''\n
         BOT IS ONLINE! ({bot.user})
