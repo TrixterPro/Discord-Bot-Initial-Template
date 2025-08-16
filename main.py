@@ -43,6 +43,7 @@ try:
 
 
     @bot.command()
+    @commands.has_permissions(administrator=True)
     async def sync(ctx):
         await bot.tree.sync()
         await ctx.reply('**✅ Successfully synced all the slash commands**')
