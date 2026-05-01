@@ -1,9 +1,6 @@
 /Logs
 /utils/__pycache__
 /cogs/__pycache__
-<<<<<<< HEAD
 /.vscode
-=======
-/.vscode
-/.vscode/coding-times.db
->>>>>>> 6eba9dc11efba11fc7edbc69f8bddc1d16c2c9d8
+/config.yml
+/venv

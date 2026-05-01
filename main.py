@@ -2,6 +2,8 @@ try:
     from utils.PackageHandler import auto_install_missing_packages
     from utils.Colors import Colors
     print(f'[{Colors.GREEN}{Colors.BOLD}LOGS{Colors.RESET}] Verifying packages...')
+    
+    # Try to auto install the missing packages
     auto_install_missing_packages()
     
     import discord
@@ -46,7 +48,7 @@ try:
 
         
 
-
+    # Sync slash command tree
     @bot.command()
     @commands.has_permissions(administrator=True)
     async def sync(ctx):
@@ -84,7 +86,7 @@ try:
                 if filename.endswith('.py'):
                     await bot.unload_extension(f'cogs.{filename[:-3]}')
             await ctx.send('Unloaded all cogs successfully.')
-
+    # Reload a cog
     @bot.command()
     async def reloadcog(ctx, cogname: str):
         try:

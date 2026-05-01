@@ -1,31 +1,49 @@
-import ast
 import subprocess
 import sys
 import os
 
-def get_imports_from_file(filepath):
-    with open(filepath, "r", encoding="utf-8") as f:
-        root = ast.parse(f.read(), filename=filepath)
-
-    imports = set()
-    for node in ast.walk(root):
-        if isinstance(node, ast.Import):
-            for n in node.names:
-                imports.add(n.name.split('.')[0])
-        elif isinstance(node, ast.ImportFrom):
-            if node.module:
-                imports.add(node.module.split('.')[0])
-    return imports
-
 def auto_install_missing_packages():
-    script_path = os.path.abspath(sys.argv[0])
-    imports = get_imports_from_file(script_path)
-
-    for package in imports:
+    """Install packages from requirements.txt only if any are missing."""
+    # Get the project root directory
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    requirements_file = os.path.join(project_root, "requirements.txt")
+    
+    if not os.path.exists(requirements_file):
+        print("[WARNING] requirements.txt not found")
+        return
+    
+    # Read requirements.txt and extract package names
+    try:
+        with open(requirements_file, "r") as f:
+            packages = []
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    # Extract package name by removing version specifiers
+                    package = line.split("==")[0].split(">=")[0].split("<=")[0]
+                    packages.append(package)
+    except Exception as e:
+        print(f"[ERROR] Failed to read requirements.txt: {e}")
+        return
+    
+    # Check if any packages are missing
+    missing_packages = []
+    for package in packages:
         try:
             __import__(package)
         except ImportError:
-            print(f"[INFO] Installing missing package: {package}")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+            missing_packages.append(package)
+    
+    # Install only if packages are missing
+    if missing_packages:
+        print(f"[INFO] Missing packages detected: {', '.join(missing_packages)}")
+        try:
+            print("[INFO] Installing packages from requirements.txt...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", requirements_file])
+            print("[INFO] Packages installed successfully")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to install packages: {e}")
+    else:
+        print("[INFO] All packages already installed")
 
 auto_install_missing_packages()
